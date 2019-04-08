@@ -69,13 +69,18 @@ Contact.prototype.fullName = function() {
 // User Interface Logic ---------
 // creating a new variable "addressBook" and assigning it to a new instance of the object "AddressBook"
 var addressBook = new AddressBook();
-//creating a funciton displayContactDetails 
+//creating a funciton displayContactDetails an argument to the local variable addressBookToDisplay
 function displayContactDetails(addressBookToDisplay) {
+  //creating a variable named contactsList and assigning the value retuened bt JQuery
   var contactsList = $("ul#contacts");
+  //creating a variable named htmlForContactInfo and assigning it as a empty string
   var htmlForContactInfo = "";
+  //for each element in the array contacts in the addressBook object run the function that accepts one argument and assigns it the local variable contact.
   addressBookToDisplay.contacts.forEach(function(contact) {
+  //assign the variable htmlForContactInfo it's value + a string + the id of the local object contact + a string + the firstName variable in the contact + a string + the varible lastName in contacts + a string.
     htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName + " " + contact.lastName + "</li>";
   });
+  //run the method html for the local object contact list with the argument html contacts.
   contactsList.html(htmlForContactInfo);
 };
 
