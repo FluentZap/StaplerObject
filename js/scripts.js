@@ -3,7 +3,7 @@
 //creates empty contacts array & initialize current id at 0
 function AddressBook() {
   this.contacts = [],
-  this.currentId = 0
+  this.currentId = -1
 }
 //it is a function of address book, it accepts one argument, and that argument is a contact
 AddressBook.prototype.addContact = function(contact) {
@@ -64,3 +64,33 @@ function Contact(firstName, lastName, phoneNumber) {
 Contact.prototype.fullName = function() {
   return this.firstName + " " + this.lastName;
 }
+
+
+// User Interface Logic ---------
+// creating a new variable "addressBook" and assigning it to a new instance of the object "AddressBook"
+var addressBook = new AddressBook();
+//creating a funciton displayContactDetails 
+function displayContactDetails(addressBookToDisplay) {
+  var contactsList = $("ul#contacts");
+  var htmlForContactInfo = "";
+  addressBookToDisplay.contacts.forEach(function(contact) {
+    htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName + " " + contact.lastName + "</li>";
+  });
+  contactsList.html(htmlForContactInfo);
+};
+
+$(document).ready(function() {
+  //when submit run the finction below with the argument event
+  $("form#new-contact").submit(function(event) {
+    event.preventDefault();
+    //create a new variable called input#firstName and assign it the value of the value of the JQuery object returned
+    var inputtedFirstName = $("input#new-first-name").val();
+    var inputtedLastName = $("input#new-last-name").val();
+    var inputtedPhoneNumber = $("input#new-phone-number").val();
+    //creating a variable called newContact and assigning the value to a new instance of the contact object and passing/accepting three values.
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
+    //were running the method addContact inder the object addressBook amd passing variable newContact.
+    addressBook.addContact(newContact);
+    console.log(addressBook.contacts);
+  })
+})
