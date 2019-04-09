@@ -129,6 +129,11 @@ $(document).ready(function() {
     var inputtedFirstName = $("input#new-first-name").val();
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
+
+    $("input#new-first-name").val("");
+    $("input#new-last-name").val("");
+    $("input#new-phone-number").val("");
+
     //creating a variable called newContact and assigning the value to a new instance of the contact object and passing/accepting three values.
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
     //were running the method addContact inder the object addressBook amd passing variable newContact.
