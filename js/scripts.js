@@ -83,8 +83,45 @@ function displayContactDetails(addressBookToDisplay) {
   //run the method html for the local object contact list with the argument html contacts.
   contactsList.html(htmlForContactInfo);
 };
+// this declares function showContact that accepts one argument and assigns it to the var contactId
+function showContact(contactId) {
+  // this declares a var contact and assigns a value returned by the function findContact in the object addressBook and it accepts one argument (contactId)
+  var contact = addressBook.findContact(contactId)
+  // run the function show on the element with the id (show-contact) returned by jq
+  $("#show-contact").show();
+  // run the function html on the elements with the class (first-name) returned by jq and passes one argument (firstName variable of the object contact)
+  $(".first-name").html(contact.firstName);
+  // run the function html on the elements with the class (last-name) returned by jq and passes one argument (lastName variable of the object contact)
+  $(".last-name").html(contact.lastName);
+  // run the function html on the elements with the class (phone-number) returned by jq and passes one argument (phoneNumber variable of the object contact)
+  $(".phone-number").html(contact.phoneNumber);
+  // declares a var buttons and sets it to equal the element with the id of buttons.
+  var buttons =$("#buttons");
+  // removes all child (elements) nodes of the set of matched elements from the DOM.
+  buttons.empty();
+  // adds to the top of child (li) of parent (button) a string + the id of the local object (contact) + string
+  buttons.append("<button class='deleteButton' id=" + contact.id +  ">Delete</button>");
+}
+
+// declaring function attachContactListeners that accepts no argument
+function attachContactListeners() {
+  // when the on function is triggered by the event "click" by jq function, it adds an event listener
+  $("ul#contacts").on("click", "li", function() {
+    // this runs function showContact(passing one argument the id of li)
+    showContact(this.id);
+  });
+  // new code
+  //
+  $("#buttons").on("click", ".deleteButton", function() {
+    addressBook.deleteContact(this.id);
+    $("#show-contact").hide();
+    displayContactDetails(addressBook);
+  });
+};
 
 $(document).ready(function() {
+  // run the function attachContactListeners with 0 argument
+  attachContactListeners();
   //when submit run the finction below with the argument event
   $("form#new-contact").submit(function(event) {
     event.preventDefault();
@@ -96,6 +133,7 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
     //were running the method addContact inder the object addressBook amd passing variable newContact.
     addressBook.addContact(newContact);
-    console.log(addressBook.contacts);
+    // runs the displayContactDetails function passing the argument addressBook
+    displayContactDetails(addressBook);
   })
 })
