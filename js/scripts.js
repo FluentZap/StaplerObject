@@ -39,11 +39,24 @@ AddressBook.prototype.deleteContact = function(id) {
 
 
 
+function AddressEntry(entry, type) {
+  this.entry = entry;
+  this.type = type;
+}
+
+
+
+
 function Contact(firstName, lastName, phoneNumber) {
   this.firstName = firstName,
   this.lastName = lastName,
   this.phoneNumber = phoneNumber
+  this.addresses = [];
 }
+
+Contact.prototype.addAddress = function (entry) {
+  this.addresses.push(entry)
+};
 
 Contact.prototype.fullName = function() {
   return this.firstName + " " + this.lastName;
@@ -70,9 +83,24 @@ function showContact(contactId) {
   buttons.append("<button class='deleteButton' id=" + contact.id +  ">Delete</button>");
 }
 
+
+function showAddresses(contactId) {
+  var contact = addressBook.findContact(contactId)
+  var addressList = ""
+  for (var i = 0; i < contact.addresses.length; i++) {
+    addressList += "<p>" + contact.addresses[i].type + ": " + contact.addresses[i].entry + "</p>";
+    contact.addresses[i]
+  }
+
+  $("#addresses").html(addressList);
+
+}
+
+
 function attachContactListeners() {
   $("ul#contacts").on("click", "li", function() {
 
+    showAddresses(this.id)
     showContact(this.id);
   });
   $("#buttons").on("click", ".deleteButton", function() {
@@ -90,12 +118,34 @@ $(document).ready(function() {
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
 
-    $("input#new-first-name").val("");
-    $("input#new-last-name").val("");
-    $("input#new-phone-number").val("");
+    var inputtedEmailP = $("input#primary-email-address").val();
+    var inputtedEmailS = $("input#secondary-email-address").val();
+    var inputtedAddressP = $("input#primary-home-address").val();
+    var inputtedAddressS = $("input#secondary-home-address").val();
+
+    clearForm();
 
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber);
+    if (inputtedEmailP) newContact.addAddress(new AddressEntry(inputtedEmailP, "Primary Email"))
+    if (inputtedEmailS) newContact.addAddress(new AddressEntry(inputtedEmailS, "Secondary Email"))
+    if (inputtedAddressP) newContact.addAddress(new AddressEntry(inputtedAddressP, "Primary Address"))
+    if (inputtedAddressS) newContact.addAddress(new AddressEntry(inputtedAddressS, "Secondary Address"))
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
+    debugger;
   })
 })
+
+
+
+
+function clearForm() {
+  $("input#new-first-name").val("");
+  $("input#new-last-name").val("");
+  $("input#new-phone-number").val("");
+
+  $("input#primary-email-address").val("");
+  $("input#primary-email-address").val("");
+  $("input#primary-home-address").val("");
+  $("input#secondary-home-address").val("");
+}
